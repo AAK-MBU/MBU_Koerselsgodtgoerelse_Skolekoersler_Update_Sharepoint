@@ -1,6 +1,7 @@
 """This module contains the main process of the robot."""
 import json
 import os
+from datetime import datetime
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
 from OpenOrchestrator.database.queues import QueueStatus
 from office365.runtime.auth.user_credential import UserCredential
@@ -19,7 +20,7 @@ def process(orchestrator_connection: OrchestratorConnection) -> None:
     update_sharepoint(orchestrator_connection, path_arg, username, password)
 
 
-def update_sharepoint(orchestrator_connection, path_arg, username, password):
+def update_sharepoint(orchestrator_connection: OrchestratorConnection, path_arg, username, password):
     """Update the SharePoint folders."""
     orchestrator_connection.log_trace("Updating SharePoint folders.")
 
@@ -40,7 +41,11 @@ def update_sharepoint(orchestrator_connection, path_arg, username, password):
         file_path = os.path.join(path_arg, filename)
 
         if os.path.isfile(file_path):  # Ensure it's a file
-            failed_elements = orchestrator_connection.get_queue_elements(config.QUEUE_NAME, status=QueueStatus.FAILED)
+            failed_elements = orchestrator_connection.get_queue_elements(
+                config.QUEUE_NAME, 
+                status=QueueStatus.FAILED,
+                from_date=datetime.today(),
+                to_date=datetime.today())
             if failed_elements:
                 orchestrator_connection.log_trace("Moving Excel file and failed attachments to the failed folder.")
                 folder_name = os.path.splitext(filename)[0]
