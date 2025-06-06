@@ -47,7 +47,7 @@ def update_sharepoint(orchestrator_connection: OrchestratorConnection, path_arg,
                 from_date=datetime.today()-timedelta(days=1),
                 to_date=datetime.today())
             if failed_elements:
-                orchestrator_connection.log_trace("Moving Excel file and failed attachments to the failed folder.")
+                orchestrator_connection.log_trace("Moving Excel file and failed attachments to the 'Fejlet' folder.")
                 folder_name = os.path.splitext(filename)[0]
                 upload_file_to_sharepoint(username, password, path_arg, filename, "Fejlet")
                 upload_folder_to_sharepoint(username, password, path_arg, folder_name, "Fejlet")
