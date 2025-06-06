@@ -1,7 +1,7 @@
 """This module contains the main process of the robot."""
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
 from OpenOrchestrator.database.queues import QueueStatus
 from office365.runtime.auth.user_credential import UserCredential
@@ -44,7 +44,7 @@ def update_sharepoint(orchestrator_connection: OrchestratorConnection, path_arg,
             failed_elements = orchestrator_connection.get_queue_elements(
                 config.QUEUE_NAME,
                 status=QueueStatus.FAILED,
-                from_date=datetime.today()-1,
+                from_date=datetime.today()-timedelta(days=1),
                 to_date=datetime.today())
             if failed_elements:
                 orchestrator_connection.log_trace("Moving Excel file and failed attachments to the failed folder.")
