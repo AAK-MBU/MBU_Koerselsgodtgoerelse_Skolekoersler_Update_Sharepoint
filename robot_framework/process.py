@@ -42,9 +42,9 @@ def update_sharepoint(orchestrator_connection: OrchestratorConnection, path_arg,
 
         if os.path.isfile(file_path):  # Ensure it's a file
             failed_elements = orchestrator_connection.get_queue_elements(
-                config.QUEUE_NAME, 
+                config.QUEUE_NAME,
                 status=QueueStatus.FAILED,
-                from_date=datetime.today(),
+                from_date=datetime.today()-1,
                 to_date=datetime.today())
             if failed_elements:
                 orchestrator_connection.log_trace("Moving Excel file and failed attachments to the failed folder.")
